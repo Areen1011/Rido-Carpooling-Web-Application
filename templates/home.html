@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}Home | Rido{% endblock %}
+
+{% block content %}
+
+<div class="home-page">
+
+    <form action="{{ url_for('search_ride') }}" method="GET">
+
+        <div class="search-box">
+
+            <input type="text" name="from_location" placeholder="From" autocomplete="off" required>
+
+            <input type="text" name="to_location" placeholder="To" autocomplete="off" required>
+
+            <button type="submit" class="search-btn">
+                Search
+            </button>
+
+        </div>
+
+    </form>
+
+    {% if rides is not none %}
+
+    <div class="rides-box">
+
+        {% if rides|length > 0 %}
+
+        <h2 class="rides-title">Available Rides</h2>
+
+        {% for ride in rides %}
+
+        <div class="simple-ride-card">
+
+            <div class="ride-top">
+
+                <div class="ride-route">
+                    <p>{{ ride.from_location }} → {{ ride.to_location }}</p>
+                    <span>{{ ride.ride_date }} | {{ ride.ride_time }}</span>
+                </div>
+
+                <div class="ride-fare">
+                    ₹{{ ride.fare }}
+                </div>
+
+            </div>
+
+            <div class="ride-bottom">
+
+                <strong>
+                    Driver: {{ ride.fname }} {{ ride.lname }}
+                </strong>
+
+                <form action="{{ url_for('book_ride') }}" method="GET">
+
+                    <input type="hidden" name="ride_id" value="{{ ride.id }}">
+
+                    <button type="submit" class="simple-book-btn">
+                        Book Ride
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+        {% else %}
+
+        <h2>No rides found 😕</h2>
+        <p>Try searching for another destination.</p>
+
+        {% endif %}
+
+    </div>
+
+    {% endif %}
+
+    <div class="features">
+
+        <div class="feature-card">
+            <h3>🚗 Post Ride</h3>
+            <p>
+                Publish your trip details and let passengers
+                join your journey.
+            </p>
+        </div>
+
+        <div class="feature-card">
+            <h3>🔍 Search Rides</h3>
+            <p>
+                Find rides that match your destination quickly
+                and conveniently.
+            </p>
+        </div>
+
+        <div class="feature-card">
+            <h3>💰 Save Money</h3>
+            <p>
+                Share fuel costs and enjoy affordable travel
+                every day.
+            </p>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

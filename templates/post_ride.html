@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Post Ride | Rido{% endblock %}
+
+{% block content %}
+
+<div class="post-page">
+
+    <div class="post-title">
+        <h1>Post a Ride</h1>
+        <p>Share your journey and help others travel smarter.</p>
+    </div>
+
+    <div class="post-form-box">
+
+        {% if message %}
+        <div class="success-msg">{{ message }}</div>
+        {% endif %}
+
+        {% if error %}
+        <div class="error-msg">{{ error }}</div>
+        {% endif %}
+
+        <form action="{{ url_for('post_ride') }}" method="POST" class="post-form">
+
+            <label for="from_location">From (City)</label>
+            <select id="from_location" name="from_location" required>
+                <option value="">Select City</option>
+                <option>Mumbai</option>
+                <option>Pune</option>
+                <option>Nagpur</option>
+                <option>Nashik</option>
+                <option>Aurangabad</option>
+                <option>Solapur</option>
+                <option>Kolhapur</option>
+            </select>
+
+            <label for="to_location">To (City)</label>
+            <select id="to_location" name="to_location" required>
+                <option value="">Select City</option>
+                <option>Mumbai</option>
+                <option>Pune</option>
+                <option>Nagpur</option>
+                <option>Nashik</option>
+                <option>Aurangabad</option>
+                <option>Solapur</option>
+                <option>Kolhapur</option>
+            </select>
+
+            <label for="pickup_point">Pickup Point</label>
+            <input type="text" id="pickup_point" name="pickup_point" required>
+
+            <label for="drop_point">Drop Point</label>
+            <input type="text" id="drop_point" name="drop_point" required>
+
+            <label for="ride_date">Date</label>
+            <input type="date" id="ride_date" name="ride_date" min="{{ today }}" required>
+
+            <label for="ride_time">Time</label>
+            <input type="time" id="ride_time" name="ride_time" required>
+
+            <label for="seats">Seats Available</label>
+            <input type="number" id="seats" name="seats" min="1" required>
+
+            <label for="car_number">Car Number</label>
+            <input type="text" id="car_number" name="car_number" placeholder="MH12AB1234" required>
+
+            <label for="car_model">Car Model</label>
+            <input type="text" id="car_model" name="car_model" placeholder="Swift, Nexon, Creta..." required>
+
+            <label for="fare_amount">Amount (₹)</label>
+            <input type="number" id="fare_amount" name="fare_amount" min="0" placeholder="0 for free ride" required>
+
+            <button type="submit" class="submit-btn">
+
+                Post Ride
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}My Booked Rides | Rido{% endblock %}
+
+{% block content %}
+
+<div class="booked-page">
+
+    <div class="booked-container">
+
+        <h1>🎫 My Booked Rides</h1>
+
+        {% if booked_rides %}
+
+        {% for ride in booked_rides %}
+
+        <article class="ride-card">
+
+            <h3>{{ ride.from_location }} → {{ ride.to_location }}</h3>
+
+            <p><strong>Pickup:</strong> {{ ride.pickup_point }}</p>
+
+            <p><strong>Drop:</strong> {{ ride.drop_point }}</p>
+
+            <p><strong>Date:</strong> {{ ride.ride_date.strftime('%d-%m-%Y') }}</p>
+
+            <p><strong>Time:</strong> {{ ride.ride_time }}</p>
+
+            <p><strong>Driver:</strong> {{ ride.driver_fname }} {{ ride.driver_lname }}</p>
+
+            <p><strong>Car:</strong> {{ ride.car_model }} ({{ ride.car_number }})</p>
+
+            <p><strong>Seats Booked:</strong> {{ ride.seats_booked }}</p>
+
+            <p><strong>Total Fare:</strong> ₹{{ ride.total_amount }}</p>
+
+            <p>
+
+                <strong>Status:</strong>
+
+                <span class="status {{ ride.status }}">
+                    {{ ride.status|capitalize }}
+                </span>
+
+            </p>
+
+            {% if ride.status != "rejected" %}
+
+            <form action="{{ url_for('cancel_booking') }}" method="POST"
+                onsubmit="return confirm('Cancel this booking?');">
+
+                <input type="hidden" name="booking_id" value="{{ ride.booking_id }}">
+
+                <button type="submit" class="cancel-btn">
+
+                    Cancel Booking
+
+                </button>
+
+            </form>
+
+            {% endif %}
+
+        </article>
+
+        {% endfor %}
+
+        {% else %}
+
+        <p class="no-bookings">
+            You haven't booked any rides yet.
+        </p>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

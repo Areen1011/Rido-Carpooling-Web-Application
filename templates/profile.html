@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile | Rido{% endblock %}
+
+{% block content %}
+
+<div class="profile-page">
+
+    <section class="profile-card">
+
+        <h2>My Profile</h2>
+
+        <div class="profile-info">
+
+            <p>
+                <strong>Name:</strong>
+                {{ user.fname }} {{ user.lname }}
+            </p>
+
+            <p>
+                <strong>Email:</strong>
+                {{ user.email }}
+            </p>
+
+            <p>
+                <strong>Date of Birth:</strong>
+
+                {% if user.dob %}
+                {{ user.dob.strftime('%d-%m-%Y') if user.dob.strftime else user.dob }}
+                {% else %}
+                -
+                {% endif %}
+            </p>
+
+            <p>
+                <strong>Phone:</strong>
+                {{ user.mobile }}
+            </p>
+
+        </div>
+
+    </section>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,99 @@
+<div class="navbar">
+
+    <!-- ================= Logo ================= -->
+
+    <a href="{{ url_for('home') }}" class="logo">
+        Rido
+    </a>
+
+    <div class="nav-right">
+
+        <!-- ================= Navigation Links ================= -->
+
+        <div class="nav-links">
+
+            <a href="{{ url_for('about_us') }}">About Us</a>
+
+            <a href="{{ url_for('search_ride') }}">Search Ride</a>
+
+            <a href="{{ url_for('post_ride') }}">Post Ride</a>
+
+            {% if session.get('user_id') %}
+
+            <div class="myrides-dropdown">
+
+                <button type="button" class="nav-link nav-dropdown-btn">
+
+                    My Rides ▾
+
+                </button>
+
+                <div class="myrides-menu">
+
+                    <a href="{{ url_for('my_posted_rides') }}">
+                        Posted Rides
+                    </a>
+
+                    <a href="{{ url_for('my_booked_rides') }}">
+                        Booked Rides
+                    </a>
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+        <!-- ================= User Section ================= -->
+
+        <div class="user-section">
+
+            {% if session.get('user_id') %}
+            <span class="username">
+                {{ session.get('fname', 'User') }}
+            </span>
+            {% endif %}
+
+            <div class="dropdown">
+
+                <button type="button" class="dropdown-btn" aria-label="User Menu">
+
+                    <img src="{{ url_for('static', filename='user_logo.svg') }}" alt="User" class="user-icon">
+
+                </button>
+
+                <div class="dropdown-menu">
+
+                    {% if session.get('user_id') %}
+
+                    <a href="{{ url_for('profile') }}">
+                        Profile
+                    </a>
+
+                    <a href="{{ url_for('logout') }}">
+                        Logout
+                    </a>
+
+                    {% else %}
+
+                    <a href="{{ url_for('login') }}">
+                        Login
+                    </a>
+
+                    <a href="{{ url_for('register') }}">
+                        Sign Up
+                    </a>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

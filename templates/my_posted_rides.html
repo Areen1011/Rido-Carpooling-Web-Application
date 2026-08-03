@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block title %}My Posted Rides | Rido{% endblock %}
+
+{% block content %}
+
+<div class="posted-page">
+
+    <div class="posted-container">
+
+        <h1>🚗 My Posted Rides</h1>
+
+        {% if posted_rides %}
+
+        {% for ride in posted_rides %}
+
+        <article class="posted-ride-card">
+
+            <h3>{{ ride.from_location }} → {{ ride.to_location }}</h3>
+
+            <p><strong>Pickup:</strong> {{ ride.pickup_point }}</p>
+
+            <p><strong>Drop:</strong> {{ ride.drop_point }}</p>
+
+            <p><strong>Date:</strong> {{ ride.ride_date.strftime('%d-%m-%Y') }}</p>
+
+            <p><strong>Time:</strong> {{ ride.ride_time }}</p>
+
+            <p><strong>Car:</strong> {{ ride.car_model }} ({{ ride.car_number }})</p>
+
+            <p><strong>Fare:</strong> ₹{{ ride.fare }}</p>
+
+            <p><strong>Seats Available:</strong> {{ ride.seats }}</p>
+
+            <form action="{{ url_for('cancel_posted_ride') }}" method="POST"
+                onsubmit="return confirm('Cancel this ride?');">
+
+                <input type="hidden" name="ride_id" value="{{ ride.id }}">
+
+                <button type="submit" class="cancel-ride-btn">
+
+                    Cancel Ride
+
+                </button>
+
+            </form>
+
+            <hr class="divider">
+
+            <h4>👥 Passengers</h4>
+
+            {% set has_passengers = false %}
+
+            {% for req in requests %}
+
+            {% if req.ride_id == ride.id %}
+
+            {% set has_passengers = true %}
+
+            <div class="passenger-card">
+
+                <p><strong>Name:</strong> {{ req.fname }} {{ req.lname }}</p>
+
+                <p><strong>Mobile:</strong> {{ req.mobile }}</p>
+
+                <p><strong>Seats:</strong> {{ req.seats_booked }}</p>
+
+                <p><strong>Total:</strong> ₹{{ req.total_amount }}</p>
+
+                <p>
+
+                    <strong>Status:</strong>
+
+                    <span class="status {{ req.status }}">
+                        {{ req.status|capitalize }}
+                    </span>
+
+                </p>
+
+                {% if req.status == "pending" %}
+
+                <form action="{{ url_for('update_booking', booking_id=req.booking_id, action='confirm') }}"
+                    method="POST" class="inline-form">
+
+                    <button type="submit" class="btn accept-btn">
+
+                        Accept
+
+                    </button>
+
+                </form>
+
+                <form action="{{ url_for('update_booking', booking_id=req.booking_id, action='reject') }}" method="POST"
+                    class="inline-form">
+
+                    <button type="submit" class="btn reject-btn">
+
+                        Reject
+
+                    </button>
+
+                </form>
+
+                {% endif %}
+
+            </div>
+
+            {% endif %}
+
+            {% endfor %}
+
+            {% if not has_passengers %}
+
+            <p class="no-bookings">
+                No bookings yet.
+            </p>
+
+            {% endif %}
+
+        </article>
+
+        {% endfor %}
+
+        {% else %}
+
+        <p class="no-bookings">
+            You haven't posted any rides yet.
+        </p>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

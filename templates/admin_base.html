@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Admin Panel | Rido{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin.css') }}">
+</head>
+
+<body>
+
+    <aside class="admin-sidebar">
+        <h2>RIDO ADMIN</h2>
+
+        <nav>
+            <a href="{{ url_for('admin_dashboard') }}">📊 Dashboard</a>
+            <a href="{{ url_for('admin_users') }}">👤 Users</a>
+            <a href="{{ url_for('admin_rides') }}">🚗 Rides</a>
+            <a href="{{ url_for('admin_bookings') }}">📦 Bookings</a>
+            <a href="{{ url_for('logout') }}">🚪 Logout</a>
+        </nav>
+    </aside>
+
+    <main class="admin-main">
+        <div class="admin-content">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+</body>
+
+</html>

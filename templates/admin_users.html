@@ -1,0 +1,91 @@
+{% extends "admin_base.html" %}
+
+{% block title %}Users | Rido Admin{% endblock %}
+
+{% block content %}
+
+<h2 class="admin-title">👤 Registered Users</h2>
+
+<div class="top-actions">
+
+    <input type="text" id="searchInput" class="search-box" placeholder="Search users...">
+
+    <button class="print-btn" onclick="printPage()">
+
+        🖨 Print / Save PDF
+
+    </button>
+
+</div>
+
+<div class="admin-table-container">
+
+    <table class="admin-table" id="userTable">
+
+        <thead>
+
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Mobile</th>
+                <th>Email</th>
+                <th>Role</th>
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            {% for user in users %}
+
+            <tr>
+
+                <td>{{ user.id }}</td>
+
+                <td>{{ user.fname }} {{ user.lname }}</td>
+
+                <td>{{ user.mobile }}</td>
+
+                <td>{{ user.email }}</td>
+
+                <td>
+
+                    {% if user.role == "admin" %}
+
+                    <span class="badge green">
+                        Admin
+                    </span>
+
+                    {% else %}
+
+                    <span class="badge gray">
+                        User
+                    </span>
+
+                    {% endif %}
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% if users|length == 0 %}
+
+<p class="empty-data">
+
+    No users found.
+
+</p>
+
+{% endif %}
+
+<script src="{{ url_for('static', filename='admin.js') }}"></script>
+
+{% endblock %}

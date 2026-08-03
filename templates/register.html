@@ -1,0 +1,53 @@
+{% extends "auth_base.html" %}
+
+{% block title %}Register | Rido{% endblock %}
+
+{% block content %}
+
+<div class="auth-container">
+
+    <h2>Create Account</h2>
+
+    <form action="{{ url_for('register') }}" method="POST" class="auth-form">
+
+        <input type="text" id="fname" name="fname" placeholder="First Name" autocomplete="given-name" required>
+
+        <input type="text" id="lname" name="lname" placeholder="Last Name" autocomplete="family-name" required>
+
+        <input type="tel" id="mobile" name="mobile" placeholder="Mobile Number" maxlength="10" pattern="[0-9]{10}"
+            title="Enter a 10-digit mobile number" autocomplete="tel" required>
+
+        <input type="email" id="email" name="email" placeholder="Email Address" autocomplete="email" required>
+
+        <label for="dob" class="auth-label">
+
+            Date of Birth
+
+        </label>
+
+        <input type="date" id="dob" name="dob" required>
+
+        <input type="password" id="password" name="password" placeholder="Password" autocomplete="new-password"
+            required>
+
+        <button type="submit">
+            Register
+        </button>
+
+    </form>
+
+    <p class="auth-footer">
+
+        Already have an account?
+
+        <a href="{{ url_for('login') }}" class="auth-link">
+
+            Login
+
+        </a>
+
+    </p>
+
+</div>
+
+{% endblock %}

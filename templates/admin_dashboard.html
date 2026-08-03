@@ -1,0 +1,95 @@
+{% extends "admin_base.html" %}
+
+{% block title %}Admin Dashboard | Rido{% endblock %}
+
+{% block content %}
+
+<h2 class="admin-title">📊 Dashboard</h2>
+
+<div class="dashboard-cards">
+
+    <div class="dashboard-card">
+        <h3>Total Users</h3>
+        <p>{{ total_users }}</p>
+    </div>
+
+    <div class="dashboard-card">
+        <h3>Total Rides</h3>
+        <p>{{ total_rides }}</p>
+    </div>
+
+    <div class="dashboard-card">
+        <h3>Total Bookings</h3>
+        <p>{{ total_bookings }}</p>
+    </div>
+
+    <div class="dashboard-card confirmed">
+        <h3>Confirmed</h3>
+        <p>{{ confirmed_bookings }}</p>
+    </div>
+
+    <div class="dashboard-card pending">
+        <h3>Pending</h3>
+        <p>{{ pending_bookings }}</p>
+    </div>
+
+    <div class="dashboard-card rejected">
+        <h3>Rejected</h3>
+        <p>{{ rejected_bookings }}</p>
+    </div>
+
+</div>
+
+<h3 class="dashboard-section-title">Recent Bookings</h3>
+
+<div class="admin-table-container">
+
+    <table class="admin-table">
+
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Route</th>
+                <th>Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for b in recent_bookings %}
+
+            <tr>
+
+                <td>{{ b.fname }}</td>
+
+                <td>{{ b.from_location }} → {{ b.to_location }}</td>
+
+                <td>{{ b.ride_date }}</td>
+
+                <td>
+
+                    {% if b.status == "confirmed" %}
+                    <span class="admin-badge success">Confirmed</span>
+
+                    {% elif b.status == "pending" %}
+                    <span class="admin-badge warning">Pending</span>
+
+                    {% else %}
+                    <span class="admin-badge danger">Rejected</span>
+
+                    {% endif %}
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

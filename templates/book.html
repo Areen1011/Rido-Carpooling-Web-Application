@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Book Ride | Rido{% endblock %}
+
+{% block content %}
+
+<div class="booking-page">
+
+    <div class="booking-container">
+
+        <h2>Ride Booking Details 🚗</h2>
+
+        <div class="booking-details">
+
+            <p><strong>From:</strong> {{ ride.from_location }} | {{ ride.pickup_point }}</p>
+
+            <p><strong>To:</strong> {{ ride.to_location }} | {{ ride.drop_point }}</p>
+
+            <p><strong>Date:</strong> {{ ride.ride_date.strftime('%d-%m-%Y') }}</p>
+
+            <p><strong>Time:</strong> {{ ride.ride_time }}</p>
+
+            <p><strong>Car:</strong> {{ ride.car_model }} ({{ ride.car_number }})</p>
+
+            <p><strong>Driver:</strong> {{ ride.fname }} {{ ride.lname }}</p>
+
+            <p><strong>Driver Contact:</strong> {{ ride.driver_phone }}</p>
+
+            <p><strong>Seats Available:</strong> {{ ride.seats }}</p>
+
+        </div>
+
+        {% if ride.fare == 0 %}
+        <p class="booking-price"><strong>Price:</strong> FREE</p>
+        {% else %}
+        <p class="booking-price">
+            <strong>Price:</strong> ₹{{ "%.2f"|format(ride.fare) }} per seat
+        </p>
+        {% endif %}
+
+        <form action="{{ url_for('confirm_booking') }}" method="POST" class="booking-form">
+
+            <input type="hidden" name="ride_id" value="{{ ride.id }}">
+
+            <label for="seats_booked">
+                <strong>Select Seats:</strong>
+            </label>
+
+            <input type="number" id="seats_booked" name="seats_booked" min="1" max="{{ ride.seats }}" value="1"
+                required>
+
+            <button type="submit" class="confirm-btn">
+
+                Confirm Booking
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

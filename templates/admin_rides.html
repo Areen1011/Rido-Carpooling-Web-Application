@@ -1,0 +1,113 @@
+{% extends "admin_base.html" %}
+
+{% block title %}Admin Rides | Rido{% endblock %}
+
+{% block content %}
+
+<h2 class="admin-title">🚗 All Rides</h2>
+
+<div class="admin-top-actions">
+
+    <input type="text" id="searchInput" class="admin-search-box" placeholder="Search rides..."
+        aria-label="Search rides">
+
+    <button type="button" class="admin-print-btn" onclick="printPage()">
+
+        🖨 Print / Save PDF
+
+    </button>
+
+</div>
+
+<div class="admin-table-container">
+
+    <table id="rideTable" class="admin-table">
+
+        <thead>
+
+            <tr>
+                <th>Driver</th>
+                <th>Route</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Seats</th>
+                <th>Fare</th>
+                <th>Status</th>
+                <th class="no-print">Action</th>
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            {% for r in rides %}
+
+            <tr>
+
+                <td>{{ r.fname }} {{ r.lname }}</td>
+
+                <td>{{ r.from_location }} → {{ r.to_location }}</td>
+
+                <td>{{ r.ride_date }}</td>
+
+                <td>{{ r.ride_time }}</td>
+
+                <td>{{ r.seats }}</td>
+
+                <td>₹{{ r.fare }}</td>
+
+                <td>
+
+                    {% if r.status == "active" %}
+                    <span class="admin-badge success">Active</span>
+
+                    {% elif r.status == "cancelled" %}
+                    <span class="admin-badge danger">Cancelled</span>
+
+                    {% else %}
+                    <span class="admin-badge secondary">{{ r.status }}</span>
+
+                    {% endif %}
+
+                </td>
+
+                <td class="no-print">
+
+                    {% if r.status != "cancelled" %}
+
+                    <a href="{{ url_for('admin_cancel_ride', ride_id=r.id) }}" class="admin-action-btn danger-btn"
+                        onclick="return confirm('Cancel this ride?')">
+
+                        Cancel
+
+                    </a>
+
+                    {% else %}
+
+                    <span class="admin-no-action">
+                        No Action
+                    </span>
+
+                    {% endif %}
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% if rides|length == 0 %}
+
+<p class="admin-empty-message">
+    No rides found.
+</p>
+
+{% endif %}
+
+{% endblock %}
