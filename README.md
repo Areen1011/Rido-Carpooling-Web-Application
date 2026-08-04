@@ -180,7 +180,51 @@ Some features I would like to add in the future are:
 
 ## Screenshots
 
-I will add screenshots of the application here soon.
+### Home Page
+
+![Home](screenshots/Home_Page.png)
+
+---
+
+### Search Ride
+
+![Search Ride](screenshots/Search_Ride.png)
+
+---
+
+### Post Ride
+
+![Post Ride](screenshots/Post_Ride.png)
+
+---
+
+### Ride Booking
+
+![Ride Booking](screenshots/Ride_Booking.png)
+
+---
+
+### Admin Dashboard
+
+![Admin Dashboard](screenshots/Admin_Dashboard.png)
+
+---
+
+### Admin Users
+
+![Admin Users](screenshots/Admin_Users.png)
+
+---
+
+### Admin Rides
+
+![Admin Rides](screenshots/Admin_Rides.png)
+
+---
+
+### Admin Bookings
+
+![Admin Bookings](screenshots/Admin_Bookings.png)
 
 ---
 
