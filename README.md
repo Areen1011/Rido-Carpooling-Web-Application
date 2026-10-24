@@ -1,237 +1,134 @@
-# 🚗 Rido - Carpooling Web Application
+# 🚗 Rido: Carpooling Web Application
 
-Rido is a carpooling web application that I built as my graduation project using Flask and MySQL. The main aim of this project is to make ride sharing simple and convenient. Users can post rides, search for available rides, and book seats. Drivers can manage booking requests, while the admin can manage users, rides, and bookings from a separate dashboard.
+Rido is a full-stack carpooling web application that connects drivers who have empty seats with passengers travelling the same way. Drivers post rides, passengers search and book seats, and drivers approve or reject each request. An admin dashboard lets administrators manage users, rides and bookings.
 
-This project helped me understand how a full-stack web application works, from designing the database to building the frontend and backend.
+🔗 **Live demo:** https://rido-carpooling-web-application.onrender.com
+💻 **Source code:** https://github.com/Areen1011/Rido-Carpooling-Web-Application
+
+> **Note:** The demo runs on free hosting tiers, so the **first load may take up to a minute** while the server wakes up.
+> **Demo only:** please use dummy data (fake name and mobile number) when registering. Do not enter real personal details.
 
 ---
 
-## Features
+## ✨ Features
 
-### User
+**For users**
+- Register and log in (age 18+ check, hashed passwords)
+- Post a ride with route, pickup/drop points, date, time, seats, car details and fare
+- Search rides by from/to location (past and full rides are hidden)
+- Book seats and track status: pending, confirmed or rejected
+- Email notification when a booking request is submitted
+- Drivers can confirm or reject requests, and cancel their rides
+- Passengers can cancel their bookings
+- Profile page and a built-in help chatbot
 
-- Register and Login
-- Secure password storage
-- Search rides
-- Post rides
-- Book rides
-- Cancel bookings
-- View My Booked Rides
-- View My Posted Rides
-- Manage booking requests
-- View profile
-
-### Admin
-
-- Admin Dashboard
-- View all users
-- View all rides
+**For admins**
+- Dashboard with totals for users, rides and bookings, plus recent activity
+- Search and view users (with their posted and booked rides), delete users
+- View and cancel rides
 - View all bookings
-- Search records
-- Print reports
-
-### Other
-
-- Chatbot
-- Responsive design
-- Session management
-- Password hashing
 
 ---
 
-## Technologies Used
+## 📸 Screenshots
 
-- Python
-- Flask
-- MySQL
-- HTML
-- CSS
-- JavaScript
-- Git & GitHub
+| Home Page | Search Rides |
+|---|---|
+| ![Home Page](screenshots/Home_Page.png) | ![Search Ride](screenshots/Search_Ride.png) |
+
+| Post a Ride | Ride Booking |
+|---|---|
+| ![Post Ride](screenshots/Post_Ride.png) | ![Ride Booking](screenshots/Ride_Booking.png) |
+
+| Admin Dashboard | Admin: Users |
+|---|---|
+| ![Admin Dashboard](screenshots/Admin_Dashboard.png) | ![Admin Users](screenshots/Admin_Users.png) |
+
+| Admin: Rides | Admin: Bookings |
+|---|---|
+| ![Admin Rides](screenshots/Admin_Rides.png) | ![Admin Bookings](screenshots/Admin_Bookings.png) |
 
 ---
 
-## Project Structure
+## 🛠 Tech Stack
 
+- **Backend:** Python, Flask
+- **Database:** MySQL (connection pooling with `mysql-connector-python`)
+- **Frontend:** HTML, CSS, JavaScript (Jinja2 templates)
+- **Email:** Brevo transactional email API
+- **Hosting:** Render (web app), Aiven (managed MySQL)
+
+---
+
+## 🗄 Database Schema
+
+Three tables: `users`, `rides` and `bookings`.
+- `rides.driver_id` references `users.id`
+- `bookings.ride_id` references `rides.id` and `bookings.user_id` references `users.id`
+
+The full schema is in `database.sql`.
+
+---
+
+## 🚀 Run Locally
+
+1. **Clone the repo**
+   ```bash
+   git clone https://github.com/Areen1011/Rido-Carpooling-Web-Application.git
+   cd Rido-Carpooling-Web-Application
+   ```
+
+2. **Create a virtual environment and install dependencies**
+   ```bash
+   python -m venv venv
+   venv\Scripts\activate        # Windows
+   # source venv/bin/activate   # macOS / Linux
+   pip install -r requirements.txt
+   ```
+
+3. **Create the database** by running `database.sql` in MySQL (it creates the `carpool` database and the three tables).
+
+4. **Create a `.env` file** in the project root (never commit this file):
+   ```env
+   SECRET_KEY=your_secret_key
+   DB_HOST=localhost
+   DB_PORT=3306
+   DB_USER=root
+   DB_PASSWORD=your_mysql_password
+   DB_NAME=carpool
+   EMAIL_ADDRESS=your_verified_sender_email
+   BREVO_API_KEY=your_brevo_api_key
+   ```
+
+5. **Run the app**
+   ```bash
+   python app.py
+   ```
+   Open http://127.0.0.1:5000
+
+### Make an admin
+Register a normal account, then run in MySQL:
+```sql
+UPDATE users SET role='admin' WHERE email='your-admin@email.com';
 ```
-Rido/
-│
-├── static/
-├── templates/
-├── app.py
-├── database.py
-├── config.py
-├── requirements.txt
-├── README.md
-└── .env.example
-```
+Log out and log in again to open the admin dashboard.
 
 ---
 
-## How to Run
+## ☁️ Deployment
 
-### 1. Clone the repository
-
-```bash
-git clone https://github.com/yourusername/Rido.git
-```
-
-### 2. Move into the project folder
-
-```bash
-cd Rido
-```
-
-### 3. Create a virtual environment
-
-```bash
-python -m venv venv
-```
-
-### 4. Activate it
-
-Windows
-
-```bash
-venv\Scripts\activate
-```
-
-### 5. Install the required packages
-
-```bash
-pip install -r requirements.txt
-```
-
-### 6. Create a `.env` file
-
-Example:
-
-```
-SECRET_KEY=your_secret_key
-DB_HOST=localhost
-DB_USER=root
-DB_PASSWORD=your_password
-DB_NAME=carpool
-DB_PORT=3306
-```
-
-### 7. Import the database
-
-Create the MySQL database using the SQL script included in the project.
-
-### 8. Run the project
-
-```bash
-python app.py
-```
-
-Open:
-
-```
-http://127.0.0.1:5000
-```
+- **Database:** managed MySQL on Aiven (create the tables with `database.sql`, minus the `CREATE DATABASE` and `USE` lines)
+- **Web app:** Render web service
+  - Build command: `pip install -r requirements.txt`
+  - Start command: `gunicorn app:app`
+  - Environment variables: `SECRET_KEY`, `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`, `EMAIL_ADDRESS`, `BREVO_API_KEY`
+- **Email:** sent through Brevo's HTTPS API, because Render's free tier blocks outbound SMTP ports
 
 ---
 
-## Database
+## 👩‍💻 Author
 
-The project uses three tables:
+**Areen Mulani**
+[GitHub](https://github.com/Areen1011)
 
-- Users
-- Rides
-- Bookings
-
-These tables are connected using foreign keys.
-
-For admin:
-UPDATE users
-SET role='admin'
-WHERE email='admin@gmail.com';
-
----
-
-## What I Learned
-
-While building this project I learned:
-
-- Flask framework
-- MySQL database integration
-- Authentication and session management
-- Password hashing
-- CRUD operations
-- Responsive web design
-- Git and GitHub
-- Project organization
-
----
-
-## Future Improvements
-
-Some features I would like to add in the future are:
-
-- Google Maps integration
-- Online payment gateway
-- Further email notifications
-- Ride ratings and reviews
-- OTP verification
-- Live ride tracking
-
----
-
-## Screenshots
-
-### Home Page
-
-![Home](screenshots/Home_Page.png)
-
----
-
-### Search Ride
-
-![Search Ride](screenshots/Search_Ride.png)
-
----
-
-### Post Ride
-
-![Post Ride](screenshots/Post_Ride.png)
-
----
-
-### Ride Booking
-
-![Ride Booking](screenshots/Ride_Booking.png)
-
----
-
-### Admin Dashboard
-
-![Admin Dashboard](screenshots/Admin_Dashboard.png)
-
----
-
-### Admin Users
-
-![Admin Users](screenshots/Admin_Users.png)
-
----
-
-### Admin Rides
-
-![Admin Rides](screenshots/Admin_Rides.png)
-
----
-
-### Admin Bookings
-
-![Admin Bookings](screenshots/Admin_Bookings.png)
-
----
-
-GitHub: https://github.com/Areen1011
-
-LinkedIn: www.linkedin.com/in/areen-mulani-4812bb382
-
----
-
-Thank you for checking out my project! 😊
+*Built as a graduation project.*
