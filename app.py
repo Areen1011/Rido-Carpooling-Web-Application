@@ -1,6 +1,5 @@
 import os
-import smtplib
-from email.message import EmailMessage
+import requests as http_requests
 from datetime import datetime, timedelta, date
 
 from flask import Flask, render_template, request, redirect, session, jsonify, url_for
@@ -1222,14 +1221,9 @@ def chatbot():
 
 # ===== SEND BOOKING EMAIL FUNCTION =====
 def send_booking_email(to_email, user_name, ride, seats_booked):
-    msg = EmailMessage()
-    msg["Subject"] = "Rido | Ride Booking Request"
-    msg["From"] = app.config["EMAIL_ADDRESS"]
-    msg["To"] = to_email
-
     total_fare = ride["fare"] * seats_booked
 
-    msg.set_content(f"""
+    body = f"""
 Dear {user_name},
 
 Your ride booking request has been submitted successfully.
@@ -1256,14 +1250,27 @@ Thank you for choosing Rido.
 Best regards,
 Team Rido
 Rido Carpooling Services
-""")
+"""
 
-    with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
-        smtp.login(
-            app.config["EMAIL_ADDRESS"],
-            app.config["EMAIL_PASSWORD"],
+    try:
+        response = http_requests.post(
+            "https://api.brevo.com/v3/smtp/email",
+            headers={
+                "api-key": os.getenv("BREVO_API_KEY"),
+                "Content-Type": "application/json",
+            },
+            json={
+                "sender": {"email": app.config["EMAIL_ADDRESS"], "name": "Rido"},
+                "to": [{"email": to_email}],
+                "subject": "Rido | Ride Booking Request",
+                "textContent": body,
+            },
+            timeout=10,
         )
-        smtp.send_message(msg)
+        if response.status_code not in (200, 201):
+            print("Brevo error:", response.status_code, response.text)
+    except Exception as e:
+        print("Email error:", e)
 
 
 # ===== APPLICATION ENTRY POINT =====
